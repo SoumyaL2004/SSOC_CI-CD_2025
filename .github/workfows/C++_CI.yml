@@ -1,0 +1,34 @@
+name: SystemC CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Install dependencies (SystemC, build-essential, etc.)
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake g++ libboost-all-dev
+
+      # Step 3: Compile the hello.cpp file
+      - name: Compile hello.cpp
+        run: |
+          g++ -o hello hello.cpp
+
+      # Step 4: Run the compiled output
+      - name: Run the executable
+        run: |
+          ./hello
