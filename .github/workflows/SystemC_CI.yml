@@ -1,40 +1,38 @@
-name: SystemC CI/CD Workflows
+name: Basic SystemC CI/CD Workflow
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  build-and-run:
+  build-run:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install build dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake g++ libboost-all-dev
 
-      - name: Download and build SystemC
+      - name: Download and install SystemC
         run: |
           git clone https://github.com/accellera-official/systemc.git
           cd systemc
-          mkdir objdir && cd objdir
-          ../configure --prefix=$HOME/systemc-install
+          mkdir build && cd build
+          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/systemc-install
           make -j$(nproc)
           make install
 
-      - name: Compile SystemC hello.cpp
+      - name: Compile SystemC hello.cpp manually
         run: |
           g++ -I$HOME/systemc-install/include \
-              -L$HOME/systemc-install/lib-linux64 \
+              -L$HOME/systemc-install/lib \
               hello.cpp -o hello -lsystemc -lm
 
-      - name: Run SystemC executable
+      - name: Run SystemC program
         run: ./hello
