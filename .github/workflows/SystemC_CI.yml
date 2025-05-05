@@ -28,11 +28,11 @@ jobs:
           make -j$(nproc)
           make install
 
-      - name: Compile SystemC helloC.cpp manually
+      - name: Compile helloC.cpp manually
         run: |
           g++ -I$HOME/systemc-install/include \
               -L$HOME/systemc-install/lib \
-              helloC.cpp -o helloC -lsystemc -lm
+              helloC.cpp -o hello -lsystemc -lm
 
       - name: Run SystemC program
-        run: ./helloC
+        run: ./hello
