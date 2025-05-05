@@ -32,7 +32,7 @@ jobs:
         run: |
           g++ -I$HOME/systemc-install/include \
               -L$HOME/systemc-install/lib \
-              hello.cpp -o hello -lsystemc -lm
+              helloC.cpp -o helloC -lsystemc -lm
 
       - name: Run SystemC program
-        run: ./hello
+        run: ./helloC
