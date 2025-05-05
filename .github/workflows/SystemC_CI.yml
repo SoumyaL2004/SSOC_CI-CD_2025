@@ -32,9 +32,9 @@ jobs:
       # Step 3: Compile the hello.cpp file (SystemC code)
       - name: Compile SystemC code
         run: |
-          g++ -I$HOME/systemc/include -L$HOME/systemc/lib -o hello hello.cpp -lsystemc -lm
+          g++ -I$HOME/systemc/include -L$HOME/systemc/lib -o helloC helloC.cpp -lsystemc -lm
 
       # Step 4: Run the compiled executable
       - name: Run the executable
         run: |
-          ./hello
+          ./helloC
