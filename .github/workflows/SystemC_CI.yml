@@ -1,4 +1,4 @@
-name: SystemC CI/CD Pipeline
+name: SystemC CI/CD Workflows
 
 on:
   push:
@@ -9,32 +9,32 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-run:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code from the repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Install dependencies (SystemC, build-essential, etc.)
-      - name: Install dependencies
+      - name: Install build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake g++ libboost-all-dev
+
+      - name: Download and build SystemC
+        run: |
           git clone https://github.com/accellera-official/systemc.git
           cd systemc
           mkdir objdir && cd objdir
-          ../configure --prefix=$HOME/systemc
-          make -j4
+          ../configure --prefix=$HOME/systemc-install
+          make -j$(nproc)
           make install
 
-      # Step 3: Compile the hello.cpp file (SystemC code)
-      - name: Compile SystemC code
+      - name: Compile SystemC hello.cpp
         run: |
-          g++ -I$HOME/systemc/include -L$HOME/systemc/lib -o helloC helloC.cpp -lsystemc -lm
+          g++ -I$HOME/systemc-install/include \
+              -L$HOME/systemc-install/lib-linux64 \
+              hello.cpp -o hello -lsystemc -lm
 
-      # Step 4: Run the compiled executable
-      - name: Run the executable
-        run: |
-          ./helloC
+      - name: Run SystemC executable
+        run: ./hello
