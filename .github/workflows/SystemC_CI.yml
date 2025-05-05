@@ -35,4 +35,5 @@ jobs:
               helloC.cpp -o helloC -lsystemc -lm
 
       - name: Run SystemC program
-        run: ./helloC
+        run: |
+          LD_LIBRARY_PATH=$HOME/systemc-install/lib ./helloC
